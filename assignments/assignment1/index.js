@@ -7,7 +7,7 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-// Global product list and cart
+// // Global product list and cart
 let productList = [];
 const cartItems = new Cart();
 

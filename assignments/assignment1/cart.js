@@ -4,20 +4,23 @@ class Cart {
     }
 
     add(product) {
-        this.products.set(`${product.name}`, product);
+        this.products.set(product.name, product);
     }
 
     remove(productName) {
         const initialLength = this.products.size;
-        this.products = this.products.delete(productName);
+        this.products.delete(productName);
         return initialLength !== this.products.size;
     }
 
     calculateTotalPrice() {
         let totalPrice = 0;
-        for (let product of this.products){
+        console.log('inside cart total products', this.products)
+        for (let product of this.products.values()){
+            console.log('inside cart loop', product)
             totalPrice += product.price;
         }
+        console.log('inside cart', totalPrice)
         return totalPrice
     }
 
