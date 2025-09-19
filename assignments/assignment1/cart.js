@@ -1,24 +1,28 @@
 class Cart {
     constructor() {
-        this.products = [];
+        this.products = new Map();
     }
 
     add(product) {
-        this.products.push(product);
+        this.products.set(`${product.name}`, product);
     }
 
     remove(productName) {
-        const initialLength = this.products.length;
-        this.products = this.products.filter((p) => p.name !== productName);
-        return initialLength !== this.products.length;
+        const initialLength = this.products.size;
+        this.products = this.products.delete(productName);
+        return initialLength !== this.products.size;
     }
 
     calculateTotalPrice() {
-        return this.products.reduce((total, product) => total + product.price, 0);
+        let totalPrice = 0;
+        for (let product of this.products){
+            totalPrice += product.price;
+        }
+        return totalPrice
     }
 
     getTotalItems() {
-        return this.products.length;
+        return this.products.size;
     }
 }
 

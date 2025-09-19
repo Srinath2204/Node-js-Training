@@ -1,8 +1,6 @@
-// app.js
-
 import readline from "readline";
-import Cart from "./cart.js";
-import Product from "./product.js"
+import Cart from "./Cart.js";
+import Product from "./Product.js"
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -74,13 +72,13 @@ function addToCart() {
 
     rl.question('Enter the number of the product to add to cart: ', (input) => {
         const index = parseInt(input) - 1;
-        if (isNaN(index) || index < 0 || index >= productList.length) {
+        if (isNaN(index) || index < 0 || index >= productList.size) {
             console.log('Invalid product number.');
             return showMenu();
         }
 
         const product = productList[index];
-        cartItems.add(product);
+        cartItems.remove(product);
         console.log(`Added "${product.name}" to cart.`);
         showCartSummary();
         showMenu();
@@ -104,14 +102,27 @@ function removeFromCart() {
             return showMenu();
         }
 
+        const productsMap = new Map(cartItems.products.map((p) => [p.name, p]));
+        console.log('Map product', productsMap);
         const productName = cartItems.products[index].name;
-        const removed = cartItems.remove(productName);
+        // const removed = productsMap.delete(productName);
+        // const removed = cartItems.remove(productName);
 
-        if (removed) {
-            console.log(`Removed "${productName}" from cart.`);
+         if (productsMap.has(productName)) {
+            productsMap.delete(productName);
+            console.log(`Removed "${productName}" from Map.`);
         } else {
-            console.log(`Product "${productName}" not found in cart.`);
+            console.log(`Product "${productName}" not found in Map.`);
         }
+
+        // Update cartItems.products from the Map
+        cartItems.products = Array.from(productsMap.values());
+
+        // if (removed) {
+        //     console.log(`Removed "${productName}" from cart.`);
+        // } else {
+        //     console.log(`Product "${productName}" not found in cart.`);
+        // }
 
         showCartSummary();
         showMenu();
