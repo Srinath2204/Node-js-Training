@@ -85,12 +85,18 @@ function addToCart() {
             console.log('Invalid product number.');
             return showMenu();
         }
-
-        const product = productList[index];
-        cartItems.add(product);
-        console.log(`Added "${product.name}" to cart.`);
-        showCartSummary();
-        showMenu();
+        rl.question('Enter quantity: ', (quantity) => {
+            const parsedQuantity = parseInt(quantity);
+            if (isNaN(parsedQuantity) || parsedQuantity <= 0 ) {
+                console.log('Invalid quantity.');
+                return showMenu();
+            }
+            const product = productList[index];
+            cartItems.add(product, parsedQuantity);
+            console.log(`Added "${product.name}" to cart.`);
+            showCartSummary();
+            showMenu();
+        });
     });
 }
 
@@ -111,25 +117,37 @@ function removeFromCart() {
             return showMenu();
         }
 
-        const productName = productsArray[index].name;
-        const removed = cartItems.remove(productName);
+        rl.question('Enter quantity: ', (quantity) => {
+            const parsedQuantity = parseInt(quantity);
+            if (isNaN(parsedQuantity) || parsedQuantity <= 0 ) {
+                console.log('Invalid quantity.');
+                return showMenu();
+            }
 
-        if (removed) {
-            console.log(`Removed "${productName}" from cart.`);
-        } else {
-            console.log(`Product "${productName}" not found in cart.`);
-        }
+            const productName = productsArray[index].name;
+            const removed = cartItems.remove(productName, parsedQuantity);
 
-        showCartSummary();
-        showMenu();
+            if (removed) {
+                console.log(`Removed "${productName}" from cart.`);
+            } else {
+                console.log(`Product "${productName}" not found in cart.`);
+            }
+
+            showCartSummary();
+            showMenu();
+        });
     });
 }
 
 // Utility: Show cart summary
 function showCartSummary() {
+    let productDetails = cartItems.getItemDetails();
     console.log(`\n Cart Summary:
+Product details : 
+${productDetails.join('\n')};
 Total items: ${cartItems.getTotalItems()}
 Total price: $${cartItems.calculateTotalPrice().toFixed(2)}
+Total quantity: ${cartItems.getTotalQuantity()}
 `);
 }
 
