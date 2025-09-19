@@ -15,12 +15,9 @@ class Cart {
 
     calculateTotalPrice() {
         let totalPrice = 0;
-        console.log('inside cart total products', this.products)
         for (let product of this.products.values()){
-            console.log('inside cart loop', product)
             totalPrice += product.price;
         }
-        console.log('inside cart', totalPrice)
         return totalPrice
     }
 

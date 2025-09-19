@@ -68,17 +68,18 @@ function addToCart() {
     }
 
     console.log('\nAvailable Products:');
+    
     productList.forEach((p, i) => console.log(`${i + 1}. ${p.name} - $${p.price}`));
 
     rl.question('Enter the number of the product to add to cart: ', (input) => {
         const index = parseInt(input) - 1;
-        if (isNaN(index) || index < 0 || index >= productList.size) {
+        if (isNaN(index) || index < 0 || index >= productList.length) {
             console.log('Invalid product number.');
             return showMenu();
         }
 
         const product = productList[index];
-        cartItems.remove(product);
+        cartItems.add(product);
         console.log(`Added "${product.name}" to cart.`);
         showCartSummary();
         showMenu();
@@ -91,9 +92,9 @@ function removeFromCart() {
         console.log('Cart is empty.');
         return showMenu();
     }
-
+    const productsArray = Array.from(cartItems.products.values());
     console.log('\nProducts in Cart:');
-    cartItems.products.forEach((p, i) => console.log(`${i + 1}. ${p.name} - $${p.price}`));
+    productsArray.forEach((p, i) => console.log(`${i + 1}. ${p.name} - $${p.price}`));
 
     rl.question('Enter the number of the product to remove from cart: ', (input) => {
         const index = parseInt(input) - 1;
@@ -102,27 +103,14 @@ function removeFromCart() {
             return showMenu();
         }
 
-        const productsMap = new Map(cartItems.products.map((p) => [p.name, p]));
-        console.log('Map product', productsMap);
-        const productName = cartItems.products[index].name;
-        // const removed = productsMap.delete(productName);
-        // const removed = cartItems.remove(productName);
+        const productName = productsArray[index].name;
+        const removed = cartItems.remove(productName);
 
-         if (productsMap.has(productName)) {
-            productsMap.delete(productName);
-            console.log(`Removed "${productName}" from Map.`);
+        if (removed) {
+            console.log(`Removed "${productName}" from cart.`);
         } else {
-            console.log(`Product "${productName}" not found in Map.`);
+            console.log(`Product "${productName}" not found in cart.`);
         }
-
-        // Update cartItems.products from the Map
-        cartItems.products = Array.from(productsMap.values());
-
-        // if (removed) {
-        //     console.log(`Removed "${productName}" from cart.`);
-        // } else {
-        //     console.log(`Product "${productName}" not found in cart.`);
-        // }
 
         showCartSummary();
         showMenu();
