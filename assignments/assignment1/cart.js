@@ -4,7 +4,13 @@ class Cart {
     }
 
     add(product) {
-        this.products.set(product.name, product);
+        if(this.products.has(product.name)){
+            console.log(`${product.name} is already in cart`);
+            return
+        }
+        else {
+            this.products.set(product.name, product);
+        }
     }
 
     remove(productName) {

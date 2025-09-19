@@ -1,6 +1,7 @@
 import readline from "readline";
 import Cart from "./Cart.js";
 import Product from "./Product.js"
+import { parse } from "path";
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -48,13 +49,20 @@ function addNewProduct() {
     rl.question('Enter product name: ', (name) => {
         rl.question('Enter product price: ', (price) => {
             const parsedPrice = parseFloat(price);
-            if (isNaN(parsedPrice)) {
+            if (isNaN(parsedPrice) || parsedPrice <= 0) {
                 console.log('Invalid price. Try again.');
                 return showMenu();
             }
 
-            productList.push(new Product(name, parsedPrice));
-            console.log(`Product "${name}" added to product list.`);
+            const isProductExists = productList.some((product) => product.name.toLowerCase() === name.toLowerCase())
+
+            if(isProductExists){
+                console.log(`Product "${name}" already exists.`);
+            }
+            else{
+                productList.push(new Product(name, parsedPrice));
+                console.log(`Product "${name}" added to product list.`);
+            }
             showMenu();
         });
     });
